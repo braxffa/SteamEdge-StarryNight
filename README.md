@@ -2,7 +2,8 @@
 
 A theme-only patch for [SteamEdge](https://github.com/Miabeyefendi/SteamEdge).
 It adds a Starry Night option in Settings, a black-to-navy sky, small twinkling
-stars, and shooting stars. The sky also appears on the sign-in screen.
+stars, shooting stars, and `#6215D6` buttons and version badge. The sky also
+appears on the sign-in screen.
 
 The patch was made against upstream commit `7724dc8` (SteamEdge 1.3.3). It
 changes six theme-related files. There are no account settings or app binaries

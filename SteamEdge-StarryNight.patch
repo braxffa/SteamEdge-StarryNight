@@ -64,7 +64,7 @@ index 1c9d212..041e6f6 100644
    <script>
      // Giris ekraninda da secili dil uygulanir (ayarlar main surecten okunur).
 diff --git a/src/main/js/tema.js b/src/main/js/tema.js
-index f3d0e3d..ea9f674 100644
+index f3d0e3d..2385f8c 100644
 --- a/src/main/js/tema.js
 +++ b/src/main/js/tema.js
 @@ -1,4 +1,5 @@
@@ -81,7 +81,7 @@ index f3d0e3d..ea9f674 100644
 +      '030305': '000000', '090c12': '000000', '0d1118': '152238', '101621': '152238', '151c28': '152238',
 +      '1d2432': '142b44', '2b3345': '29435d', '333d4d': '365873', '252a3a': '152238', '1e2836': '142b44',
 +      '0e1620': '152238', 'dce2fa': 'ffffff', 'b9c0d6': 'adb5bd', '8b8f9e': 'adb5bd', '656d80': '7f7f7f',
-+      '5624b3': 'fff3c4', 'c2aaee': 'fff3c4', '0f1720': '000000',
++      '5624b3': '6215d6', 'c2aaee': '6215d6', '0f1720': '000000',
 +    },
      white: {
        '030305': 'e4e2dc', '090c12': 'f5f4f2', '0d1118': 'ffffff', '101621': 'f0eeea', '151c28': 'eceae6',
@@ -236,10 +236,10 @@ index 0c39fa5..e5817bf 100644
                  <div style="display:flex;align-items:center;gap:10px;padding:17px 0 10px">
 diff --git a/src/main/style/starry-night.css b/src/main/style/starry-night.css
 new file mode 100644
-index 0000000..62b959f
+index 0000000..73db07e
 --- /dev/null
 +++ b/src/main/style/starry-night.css
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,106 @@
 +/* Spicetify StarryNight Base palette and animation, adapted to SteamEdge
 +   by @braxffa on 2026-10-04. Original theme authors: Brandon Chen and
 +   Julissa Laignelet. See STARRY_NIGHT_NOTICES.md in the repository root. */
@@ -250,8 +250,8 @@ index 0000000..62b959f
 +  --spice-rgb-shooting-star-glow:255,255,255;
 +  --e-bg:#000000; --e-bgAlt:#000000;
 +  --e-s1:#152238; --e-s2:#152238; --e-s3:#152238;
-+  --e-bdPassive:#142b44; --e-bd:#29435d; --e-bdActive:#fff3c4; --e-bdFocus:#fff3c4;
-+  --e-brand:#fff3c4; --e-brandHover:#fff8df; --e-brandActive:#fff3c4; --e-brandGlow:#fff3c4;
++  --e-bdPassive:#142b44; --e-bd:#29435d; --e-bdActive:#6215d6; --e-bdFocus:#6215d6;
++  --e-brand:#6215d6; --e-brandHover:#7932e3; --e-brandActive:#6215d6; --e-brandGlow:#6215d6;
 +  --e-title:#ffffff; --e-body:#ffffff; --e-sub:#adb5bd; --e-muted:#adb5bd; --e-off:#7f7f7f;
 +  background:#000000;
 +}
@@ -269,13 +269,19 @@ index 0000000..62b959f
 +html[data-tema="starry-night"] .e-main > section {
 +  --bg:#000000; --panel:#152238; --card:#152238; --card2:#152238;
 +  --line:#142b44; --line-2:#29435d; --surface:#152238; --surface-2:#152238; --border:#29435d;
-+  --blue:#fff3c4; --primary:#fff3c4; --accent:#fff3c4; --purple:#adb5bd;
++  --blue:#6215d6; --primary:#6215d6; --accent:#6215d6; --purple:#adb5bd;
 +  --txt:#ffffff; --text:#ffffff; --muted:#adb5bd; --text-2:#adb5bd; --muted2:#7f7f7f; --text-3:#7f7f7f;
 +}
 +html[data-tema="starry-night"] .e-btn.primary,
 +html[data-tema="starry-night"] .e-seg button.sel,
 +html[data-tema="starry-night"] .e-seg .e-seg-item.sel,
-+html[data-tema="starry-night"] .lgbtn { color:#111722 !important; }
++html[data-tema="starry-night"] .lgbtn { color:#ffffff !important; }
++html[data-tema="starry-night"] #tbVersion {
++  color:#6215d6 !important;
++  border-color:#6215d6 !important;
++  background:#f5f0ff;
++  font-weight:700 !important;
++}
 +html[data-tema="starry-night"] body > .bg-grid,
 +html[data-tema="starry-night"] body > div[style*="filter:blur(120px)"] { display:none !important; }
 +html[data-tema="starry-night"] .glow { box-shadow:none; }
