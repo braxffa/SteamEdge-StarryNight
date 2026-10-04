@@ -1,0 +1,342 @@
+diff --git a/STARRY_NIGHT_NOTICES.md b/STARRY_NIGHT_NOTICES.md
+new file mode 100644
+index 0000000..a215f80
+--- /dev/null
++++ b/STARRY_NIGHT_NOTICES.md
+@@ -0,0 +1,33 @@
++# Starry Night theme credits
++
++The SteamEdge port was adapted by [BraxF](https://github.com/braxffa) on
++2026-10-04 from the [Spicetify StarryNight theme](https://github.com/spicetify/spicetify-themes/tree/master/StarryNight).
++Spicetify's theme manifest credits Brandon Chen and Julissa Laignelet. The
++shooting star CSS is by Delroy Prithvi; its MIT notice is preserved in
++`src/main/style/starry-night.css`.
++
++The Spicetify community themes repository provides this MIT license:
++
++```text
++MIT License
++
++Copyright (c) 2019 morpheusthewhite
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in all
++copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++SOFTWARE.
++```
+diff --git a/src/login/login.html b/src/login/login.html
+index 1c9d212..041e6f6 100644
+--- a/src/login/login.html
++++ b/src/login/login.html
+@@ -7,6 +7,8 @@
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="../main/style/edge.css">
++<!-- Starry Night theme port by @braxffa, 2026-10-04. -->
++<link rel="stylesheet" href="../main/style/starry-night.css">
+ <style>
+   html,body{height:100%;margin:0}
+   body{overflow:hidden;user-select:none}
+@@ -87,6 +89,12 @@ <h1 style="margin:0;font-size:28px;line-height:1.1;font-weight:700;letter-spacin
+   </div>
+ 
+   <script src="../main/js/tema.js"></script>
++  <script>
++    // Starry Night theme port by @braxffa, 2026-10-04.
++    window.imu.settings.get().then(s => {
++      if (typeof temaUygula === 'function') temaUygula((s && s.theme) || 'dark');
++    }).catch(() => {});
++  </script>
+   <script src="../main/js/i18n.js"></script>
+   <script>
+     // Giris ekraninda da secili dil uygulanir (ayarlar main surecten okunur).
+diff --git a/src/main/js/tema.js b/src/main/js/tema.js
+index f3d0e3d..ea9f674 100644
+--- a/src/main/js/tema.js
++++ b/src/main/js/tema.js
+@@ -1,4 +1,5 @@
+ // ================= TEMA =================
++// Starry Night theme port added by @braxffa on 2026-10-04.
+ // Renkler sayfalarda ve JS'te satır içi yazılı (#0D1118 gibi). Hepsini değişkene taşımak
+ // her dosyaya dokunmak demekti; bunun yerine koyu temanın renkleri çalışma anında seçili
+ // paletin karşılığıyla değiştirilir: satır içi stiller, CSS kuralları ve sonradan eklenen her
+@@ -12,6 +13,12 @@
+       '0e1620': '120a22', 'dce2fa': 'f0eaf8', 'b9c0d6': 'd4c8ec', '8b8f9e': 'a898c8', '656d80': '7a6a9c',
+       '5624b3': '7a3fe0', 'c2aaee': 'd8c4ff', '0f1720': '0c0818',
+     },
++    'starry-night': {
++      '030305': '000000', '090c12': '000000', '0d1118': '152238', '101621': '152238', '151c28': '152238',
++      '1d2432': '142b44', '2b3345': '29435d', '333d4d': '365873', '252a3a': '152238', '1e2836': '142b44',
++      '0e1620': '152238', 'dce2fa': 'ffffff', 'b9c0d6': 'adb5bd', '8b8f9e': 'adb5bd', '656d80': '7f7f7f',
++      '5624b3': 'fff3c4', 'c2aaee': 'fff3c4', '0f1720': '000000',
++    },
+     white: {
+       '030305': 'e4e2dc', '090c12': 'f5f4f2', '0d1118': 'ffffff', '101621': 'f0eeea', '151c28': 'eceae6',
+       '1d2432': 'e0ddd6', '2b3345': 'd8d4cc', '333d4d': 'c8c4bc', '252a3a': 'ddd9d2', '1e2836': 'e6e3dd',
+@@ -51,22 +58,88 @@
+       gez(liste);
+     }
+   }
++  function starryNightSky(acik) {
++    const id = 'starry-night-sky';
++    let sky = document.getElementById(id);
++    if (!acik) { if (sky) sky.remove(); return; }
++    if (sky || !document.body) return;
++
++    // Port of Spicetify StarryNight theme.js. Spotify's layout selectors are
++    // replaced by SteamEdge's document body.
++    function random(min, max) { return Math.random() * (max - min) + min; }
++    const rootStyle = window.getComputedStyle(document.documentElement);
++    sky = document.createElement('div');
++    sky.id = id;
++    sky.className = 'starrynight-bg-container';
++    sky.setAttribute('aria-hidden', 'true');
++    document.body.insertBefore(sky, document.body.firstChild);
++    const canvasSize = (sky.clientWidth * sky.clientHeight) || (window.innerWidth * window.innerHeight);
++    const starsFraction = canvasSize / 4000;
++    const starColor = rootStyle.getPropertyValue('--spice-star').trim() || '#ffffff';
++    const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
++    for (let i = 0; i < starsFraction; i++) {
++      const size = Math.random() < 0.5 ? 1 : 2;
++      const star = document.createElement('div');
++      star.className = 'starrynight-star';
++      star.style.position = 'absolute';
++      star.style.left = `${random(0, 99)}%`;
++      star.style.top = `${random(0, 99)}%`;
++      star.style.opacity = random(0.5, 1);
++      star.style.width = `${size}px`;
++      star.style.height = `${size}px`;
++      star.style.backgroundColor = starColor;
++      star.style.borderRadius = '50%';
++      if (!reducedMotion && Math.random() < 1 / 5) {
++        star.style.setProperty('animation', `twinkle${Math.floor(Math.random() * 4) + 1} 5s infinite`, 'important');
++      }
++      sky.appendChild(star);
++    }
++
++    if (reducedMotion) return;
++    const shootingStarGlowColor = `rgba(${rootStyle.getPropertyValue('--spice-rgb-shooting-star-glow').trim() || '255,255,255'},0.1)`;
++    for (let i = 0; i < 4; i++) {
++      const shootingstar = document.createElement('span');
++      shootingstar.className = 'shootingstar';
++      const place = () => {
++        if (Math.random() < 0.75) {
++          shootingstar.style.top = '-4px';
++          shootingstar.style.right = `${random(0, 90)}%`;
++        } else {
++          shootingstar.style.top = `${random(0, 50)}%`;
++          shootingstar.style.right = '-4px';
++        }
++      };
++      place();
++      shootingstar.style.boxShadow = `0 0 0 4px ${shootingStarGlowColor}, 0 0 0 8px ${shootingStarGlowColor}, 0 0 20px ${shootingStarGlowColor}`;
++      shootingstar.style.animationDuration = `${Math.floor(Math.random() * 3) + 3}s`;
++      shootingstar.style.animationDelay = `${Math.floor(Math.random() * 7)}s`;
++      sky.appendChild(shootingstar);
++      shootingstar.addEventListener('animationend', () => {
++        place();
++        shootingstar.style.animation = 'none';
++        void shootingstar.offsetWidth;
++        shootingstar.style.animation = '';
++        shootingstar.style.setProperty('animation-duration', `${Math.floor(Math.random() * 4) + 3}s`, 'important');
++      });
++    }
++  }
+   let gozlem = null;
+   function temaUygula(ad) {
+     const secim = PALET[ad] ? ad : 'dark';
+     try { localStorage.setItem('se_tema', secim); } catch (_) {}
+     const onceki = document.documentElement.getAttribute('data-tema') || 'dark';
+-    if (onceki === secim) return;
++    if (onceki === secim) { starryNightSky(secim === 'starry-night'); return; }
+     // Başka bir temadan dönüş için sayfa yenilenir: eşleme geri alınamaz, kaynak koyu.
+     // Ayarlar açıksa aynı bölüme dönülür (dil değişimiyle aynı anahtar, bkz i18n.js).
+     if (onceki !== 'dark') {
+       try { if (typeof currentSetSec === 'string' && typeof I18N_DONUS_ANAHTARI === 'string') sessionStorage.setItem(I18N_DONUS_ANAHTARI, currentSetSec); } catch (_) {}
+       location.reload(); return;
+     }
+-    esle = PALET[secim];
++    esle = PALET[secim] || null;
+     document.documentElement.setAttribute('data-tema', secim);
+     document.documentElement.style.colorScheme = secim === 'white' ? 'light' : 'dark';
+-    kurallar();
++    starryNightSky(secim === 'starry-night');
++    if (esle) kurallar();
+     // Beyaz temada açık metin rengi koyuya döner; mor düğmelerin yazısı ve logodaki beyaz
+     // harf ise açık kalmalı.
+     if (secim === 'white') {
+@@ -75,11 +148,14 @@
+         + 'img[src*="logo"]{filter:drop-shadow(0 0 1px rgba(0,0,0,.6))}';
+       document.head.appendChild(st);
+     }
+-    if (document.body) agac(document.body);
+-    gozlem = new MutationObserver((ms) => { for (const m of ms) {
+-      if (m.type === 'attributes') eleman(m.target); else m.addedNodes.forEach(agac);
+-    } });
+-    gozlem.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: OZ });
++    if (gozlem) { gozlem.disconnect(); gozlem = null; }
++    if (esle) {
++      if (document.body) agac(document.body);
++      gozlem = new MutationObserver((ms) => { for (const m of ms) {
++        if (m.type === 'attributes') eleman(m.target); else m.addedNodes.forEach(agac);
++      } });
++      gozlem.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: OZ });
++    }
+   }
+   window.temaUygula = temaUygula;
+   let ilk = 'dark'; try { ilk = localStorage.getItem('se_tema') || 'dark'; } catch (_) {}
+diff --git a/src/main/main.html b/src/main/main.html
+index 4f3c101..9964138 100644
+--- a/src/main/main.html
++++ b/src/main/main.html
+@@ -18,6 +18,8 @@
+ <link rel="stylesheet" href="style/env.css">
+ <link rel="stylesheet" href="style/ayarlar.css">
+ <link rel="stylesheet" href="style/redesign.css">
++<!-- Starry Night theme port by @braxffa, 2026-10-04. -->
++<link rel="stylesheet" href="style/starry-night.css">
+ </head>
+ <body class="edge" style="margin:0;height:100vh;min-height:600px;display:flex;flex-direction:column;background:var(--e-bg);overflow:hidden">
+ 
+@@ -31,7 +33,7 @@
+     </div>
+   </div>
+ 
+-  <div style="flex:1;display:flex;flex-direction:column;min-height:0">
++  <div class="starrynight-foreground" style="flex:1;display:flex;flex-direction:column;min-height:0">
+ 
+     <!-- TOPBAR (marka + wordmark + sürüm solda, arama/bildirim/ayarlar/hesap sağda) -->
+     <header class="e-header">
+diff --git a/src/main/pages/ayarlar.html b/src/main/pages/ayarlar.html
+index 0c39fa5..e5817bf 100644
+--- a/src/main/pages/ayarlar.html
++++ b/src/main/pages/ayarlar.html
+@@ -51,7 +51,8 @@ <h1 style="margin:0;font-size:22px;font-weight:700;letter-spacing:-0.015em;color
+                 <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #101621" data-ayar-satir><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:13px;font-weight:600;color:#DCE2FA">Uygulama dili</span><span data-tip="Menüler, etiketler ve bildirim metinleri seçilen dilde gösterilir. Değişiklik kaydedince hemen uygulanır." style="position:relative;width:14px;height:14px;margin:-6px;padding:6px;box-sizing:content-box;color:#8B8F9E;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0" class="h-tip">?</span></div><select data-set="language" style="height:34px;width:184px;border-radius:12px;background:#090C12;border:1px solid #2B3345;color:#B9C0D6;font-size:12px;padding:0 12px;outline:none;cursor:pointer;flex-shrink:0"><option value="tr">Türkçe</option><option value="en">English</option><option value="de">Deutsch</option><option value="es">Español</option><option value="zh">繁體中文</option><option value="ru">Русский</option></select></div>
+                 
+                 <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #101621" data-ayar-satir><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:13px;font-weight:600;color:#DCE2FA">Açılış sayfası</span><span data-tip="Uygulama her açılışta bu sekmeyle başlar. Çoğunlukla kullandığın ekranı seçmen zaman kazandırır." style="position:relative;width:14px;height:14px;margin:-6px;padding:6px;box-sizing:content-box;color:#8B8F9E;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0" class="h-tip">?</span></div><select data-set="startPage" style="height:34px;width:184px;border-radius:12px;background:#090C12;border:1px solid #2B3345;color:#B9C0D6;font-size:12px;padding:0 12px;outline:none;cursor:pointer;flex-shrink:0"><option value="overview">Genel Bakış</option><option value="farm">Kart Düşür</option><option value="hub">Envanter & Pazar</option><option value="boost">Saat Yükseltici</option><option value="ach">Başarımlar</option></select></div>
+-                <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #101621" data-ayar-satir><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:13px;font-weight:600;color:#DCE2FA">Tema</span><span data-tip="Arayüzün ve giriş ekranının renkleri. Kaydedince hemen uygulanır." style="position:relative;width:14px;height:14px;margin:-6px;padding:6px;box-sizing:content-box;color:#8B8F9E;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0" class="h-tip">?</span></div><select data-set="theme" style="height:34px;width:184px;border-radius:12px;background:#090C12;border:1px solid #2B3345;color:#B9C0D6;font-size:12px;padding:0 12px;outline:none;cursor:pointer;flex-shrink:0"><option value="dark">Koyu</option><option value="midnight">Gece Moru</option><option value="white">Beyaz</option></select></div>
++                <!-- Starry Night theme port by @braxffa, 2026-10-04. -->
++                <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #101621" data-ayar-satir><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:13px;font-weight:600;color:#DCE2FA">Tema</span><span data-tip="Arayüzün ve giriş ekranının renkleri. Kaydedince hemen uygulanır." style="position:relative;width:14px;height:14px;margin:-6px;padding:6px;box-sizing:content-box;color:#8B8F9E;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0" class="h-tip">?</span></div><select data-set="theme" style="height:34px;width:184px;border-radius:12px;background:#090C12;border:1px solid #2B3345;color:#B9C0D6;font-size:12px;padding:0 12px;outline:none;cursor:pointer;flex-shrink:0"><option value="dark">Koyu</option><option value="midnight">Gece Moru</option><option value="white">Beyaz</option><option value="starry-night">Starry Night</option></select></div>
+                 <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #101621" data-ayar-satir><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:13px;font-weight:600;color:#DCE2FA">Arayüz yoğunluğu</span><span data-tip="Satır yüksekliği ve kart boşluklarını belirler. Sıkışık modda aynı ekrana yaklaşık üçte bir daha fazla satır sığar." style="position:relative;width:14px;height:14px;margin:-6px;padding:6px;box-sizing:content-box;color:#8B8F9E;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0" class="h-tip">?</span></div><select data-set="density" style="height:34px;width:184px;border-radius:12px;background:#090C12;border:1px solid #2B3345;color:#B9C0D6;font-size:12px;padding:0 12px;outline:none;cursor:pointer;flex-shrink:0"><option value="comfortable">Ferah</option><option value="compact">Sıkışık</option></select></div>
+                 <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid #101621" data-ayar-satir><div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="font-size:13px;font-weight:600;color:#DCE2FA">Saat biçimi</span><span data-tip="Oturum süreleri, kayıt zamanları ve sessiz saat aralığı bu biçimde gösterilir." style="position:relative;width:14px;height:14px;margin:-6px;padding:6px;box-sizing:content-box;color:#8B8F9E;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0" class="h-tip">?</span></div><select data-set="timeFormat" style="height:34px;width:184px;border-radius:12px;background:#090C12;border:1px solid #2B3345;color:#B9C0D6;font-size:12px;padding:0 12px;outline:none;cursor:pointer;flex-shrink:0"><option value="24">24 saat - 23:00</option><option value="12">12 saat - 11:00 ÖS</option></select></div>
+                 <div style="display:flex;align-items:center;gap:10px;padding:17px 0 10px">
+diff --git a/src/main/style/starry-night.css b/src/main/style/starry-night.css
+new file mode 100644
+index 0000000..62b959f
+--- /dev/null
++++ b/src/main/style/starry-night.css
+@@ -0,0 +1,100 @@
++/* Spicetify StarryNight Base palette and animation, adapted to SteamEdge
++   by @braxffa on 2026-10-04. Original theme authors: Brandon Chen and
++   Julissa Laignelet. See STARRY_NIGHT_NOTICES.md in the repository root. */
++html[data-tema="starry-night"] {
++  --spice-star:#ffffff;
++  --spice-star-glow:#ffffff;
++  --spice-shooting-star:#ffffff;
++  --spice-rgb-shooting-star-glow:255,255,255;
++  --e-bg:#000000; --e-bgAlt:#000000;
++  --e-s1:#152238; --e-s2:#152238; --e-s3:#152238;
++  --e-bdPassive:#142b44; --e-bd:#29435d; --e-bdActive:#fff3c4; --e-bdFocus:#fff3c4;
++  --e-brand:#fff3c4; --e-brandHover:#fff8df; --e-brandActive:#fff3c4; --e-brandGlow:#fff3c4;
++  --e-title:#ffffff; --e-body:#ffffff; --e-sub:#adb5bd; --e-muted:#adb5bd; --e-off:#7f7f7f;
++  background:#000000;
++}
++
++html[data-tema="starry-night"] body.edge { background:transparent !important; }
++html[data-tema="starry-night"] .starrynight-foreground,
++html[data-tema="starry-night"] .e-titlebar { z-index:1; }
++html[data-tema="starry-night"] .e-titlebar,
++html[data-tema="starry-night"] .e-header,
++html[data-tema="starry-night"] .e-aside,
++html[data-tema="starry-night"] .e-main,
++html[data-tema="starry-night"] :is(#tab-genel,#tab-kart,#tab-env,#tab-saat,#tab-gercekci,#tab-basarim,#tab-sohbet,#tab-ayarlar,#tab-empty) {
++  background:transparent !important;
++}
++html[data-tema="starry-night"] .e-main > section {
++  --bg:#000000; --panel:#152238; --card:#152238; --card2:#152238;
++  --line:#142b44; --line-2:#29435d; --surface:#152238; --surface-2:#152238; --border:#29435d;
++  --blue:#fff3c4; --primary:#fff3c4; --accent:#fff3c4; --purple:#adb5bd;
++  --txt:#ffffff; --text:#ffffff; --muted:#adb5bd; --text-2:#adb5bd; --muted2:#7f7f7f; --text-3:#7f7f7f;
++}
++html[data-tema="starry-night"] .e-btn.primary,
++html[data-tema="starry-night"] .e-seg button.sel,
++html[data-tema="starry-night"] .e-seg .e-seg-item.sel,
++html[data-tema="starry-night"] .lgbtn { color:#111722 !important; }
++html[data-tema="starry-night"] body > .bg-grid,
++html[data-tema="starry-night"] body > div[style*="filter:blur(120px)"] { display:none !important; }
++html[data-tema="starry-night"] .glow { box-shadow:none; }
++
++/* The original theme places these stars behind Spotify's transparent UI. */
++html[data-tema="starry-night"] #starry-night-sky.starrynight-bg-container {
++  position:fixed; inset:0; width:100vw; height:100vh; z-index:0;
++  pointer-events:none; overflow:hidden; mix-blend-mode:normal;
++  background:linear-gradient(180deg,#000000 0%,#142b44 100%);
++}
++.starrynight-star { position:absolute; border-radius:50%; }
++
++@keyframes twinkle1 {
++  0%,80%,100% { box-shadow:0px 0px 8px 2px var(--spice-star-glow); }
++  20%,40%,60% { box-shadow:0px 0px -8px 2px var(--spice-star-glow); }
++}
++@keyframes twinkle2 {
++  0%,20%,100% { box-shadow:0px 0px 8px 2px var(--spice-star-glow); }
++  40%,60%,80% { box-shadow:0px 0px -8px 2px var(--spice-star-glow); }
++}
++@keyframes twinkle3 {
++  0%,80%,100% { box-shadow:0px 0px -8px 2px var(--spice-star-glow); }
++  20%,40%,60% { box-shadow:0px 0px 8px 2px var(--spice-star-glow); }
++}
++@keyframes twinkle4 {
++  0%,20%,100% { box-shadow:0px 0px -8px 2px var(--spice-star-glow); }
++  40%,60%,80% { box-shadow:0px 0px 8px 2px var(--spice-star-glow); }
++}
++
++/* Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi
++   https://codepen.io/delroyprithvi/pen/LYyJROR
++   Permission is hereby granted, free of charge, to any person obtaining a copy
++   of this software and associated documentation files (the "Software"), to deal
++   in the Software without restriction, including without limitation the rights
++   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++   copies of the Software, and to permit persons to whom the Software is
++   furnished to do so, subject to the following conditions:
++   The above copyright notice and this permission notice shall be included in
++   all copies or substantial portions of the Software.
++   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++   SOFTWARE. */
++.shootingstar {
++  position:absolute; width:4px; height:4px;
++  background:var(--spice-shooting-star); border-radius:50%;
++  animation:animate 3s linear; left:initial;
++}
++.shootingstar::before {
++  content:''; position:absolute; top:50%; transform:translateY(-50%);
++  width:300px; height:1px;
++  background:linear-gradient(90deg,var(--spice-shooting-star),transparent);
++}
++@keyframes animate {
++  0% { transform:rotate(315deg) translateX(0); opacity:1; }
++  70% { opacity:1; }
++  100% { transform:rotate(315deg) translateX(-1500px); opacity:0; }
++}
++@media (prefers-reduced-motion:reduce) {
++  .starrynight-star,.shootingstar { animation:none !important; }
++}
